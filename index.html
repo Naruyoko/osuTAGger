@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>osuTAGger</title>
+    <script src="./package/jszip.js"></script>
+    <script src="./file.js"></script>
+    <script src="./setting.js"></script>
+    <meta charset="utf-8">
+    <style>
+      * {
+        font-family: "Arial";
+      }
+      .readonly {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>osuTAGger</h1>
+    <p>
+      Online tool to automatically split an osu! beatmap for practicing/testing/making video for TAG maps.
+    </p>
+    <p id="s1">
+      <label for="upload">Upload a file</label>
+      <input type="file" id="upload" accept=".osu" onchange="onupload()"><br>
+      <button onclick="readFile()">Read file</button> <span id="loading" style="display:none;">Loading...</span><span id="failedToProcessNotice" style="color:red;display:none;">Failed to process file. It may be corrupted.</span>
+    </p>
+    <p id="s2" style="display:none">
+      Title: <span id="title"></span> (<span id="titleUnicode"></span>)<br>
+      Author: <span id="artist"></span> (<span id="artistUnicode"></span>)<br>
+      Creator: <span id="creator"></span><br>
+      Difficulty: <span id="version"></span><br>
+      Split into TAG<input id="tagnum" style="width:40px;" type="number" value=4 min=1 step=1><br>
+      Split by <select id="criteria">
+        <option value="New combo">New combo</option>
+        <option value="Every object">Every object</option>
+        <option value="Combo color">Combo color</option>
+      </select><br>
+      HP: <input id="HP" type="range" min=0 max=10 step=0.1 value=5><label id="HPl" for="HP">5</label> (<span id="HPd">5</span>)<br>
+      CS: <input id="CS" type="range" min=2 max=07 step=0.1 value=5><label id="CSl" for="CS">5</label> (<span id="CSd">5</span>)<br>
+      OD: <input id="OD" type="range" min=0 max=10 step=0.1 value=5><label id="ODl" for="OD">5</label> (<span id="ODd">5</span>)<br>
+      AR: <input id="AR" type="range" min=0 max=10 step=0.1 value=5><label id="ARl" for="AR">5</label> (<span id="ARd">5</span>)<br>
+      Color: <select id="color">
+        <option value="Keep">Keep</option>
+        <option value="Rainbow">Rainbow</option>
+      </select><br>
+      Difficulty name: <input id="difname" style="width:200px;" type="text" value="Difficulty name Player [#]">, [#] will be replaced with player's number<br>
+      Have spinners for everyone: <input id="spinners" type="checkbox"><br>
+      Download as: <select id="downloadtype">
+        <option id="Separate files">Separate files</option>
+        <option id="zip">zip</option>
+      </select><br>
+      <button id="generatefile">Generate!</button> <span style="color:red;">Make sure to generate the files again after changing settings!</span> <span id="generating" style="display:none;">Generating...</span><span id="playernumnotfound" style="color:red;display:none;">You need player number in difficulty name</span>
+    </p>
+    <p id="s3" style="display:none">
+    </p>
+    <hr>
+    <p>
+      The uploaded files will not be sent to a server; All process is done client-wise!<br>
+      The first working version of this was done in a day. .osu files are not the most complex ones.<br>
+      <br>
+      Acknowledgements:<br>
+      Awesome game by Dean "peppy" Herbert<br>
+      Inspired by AutoTag by whizvox<br>
+      Compressing multiple files to .zip files using JSZip by Stuk<br>
+    </p>
+  </body>
+</html>
