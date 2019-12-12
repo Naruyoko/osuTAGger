@@ -26,8 +26,8 @@
       <button onclick="readFile()">Read file</button> <span id="loading" style="display:none;">Loading...</span><span id="failedToProcessNotice" style="color:red;display:none;">Failed to process file. It may be corrupted.</span>
     </p>
     <p id="s2" style="display:none">
-      Title: <span id="title"></span> (<span id="titleUnicode"></span>)<br>
-      Author: <span id="artist"></span> (<span id="artistUnicode"></span>)<br>
+      Title: <span id="title"></span><br>
+      Author: <span id="artist"></span><br>
       Creator: <span id="creator"></span><br>
       Difficulty: <span id="version"></span><br>
       Split into TAG<input id="tagnum" style="width:40px;" type="number" value=4 min=1 step=1><br>
@@ -39,13 +39,13 @@
       HP: <input id="HP" type="range" min=0 max=10 step=0.1 value=5><label id="HPl" for="HP">5</label> (<span id="HPd">5</span>)<br>
       CS: <input id="CS" type="range" min=2 max=07 step=0.1 value=5><label id="CSl" for="CS">5</label> (<span id="CSd">5</span>)<br>
       OD: <input id="OD" type="range" min=0 max=10 step=0.1 value=5><label id="ODl" for="OD">5</label> (<span id="ODd">5</span>)<br>
-      AR: <input id="AR" type="range" min=0 max=10 step=0.1 value=5><label id="ARl" for="AR">5</label> (<span id="ARd">5</span>)<br>
+      AR: <input id="AR" type="range" min=0 max=10 step=0.1 value=5><label id="ARl" for="AR">5</label> (<span id="ARd">5</span>) <span id="ARdisabled" style="color:red;display:none;">AR slider has been disabled as this map was older and did not have AR option (this is instead set equal to OD)</span><br>
       Color: <select id="color">
         <option value="Keep">Keep</option>
         <option value="Rainbow">Rainbow</option>
       </select><br>
       Difficulty name: <input id="difname" style="width:200px;" type="text" value="Difficulty name Player [#]">, [#] will be replaced with player's number<br>
-      Have spinners for everyone: <input id="spinners" type="checkbox"><br>
+      Have spinners for everyone: <input id="spinners" type="checkbox" checked><br>
       Download as: <select id="downloadtype">
         <option id="Separate files">Separate files</option>
         <option id="zip">zip</option>
@@ -58,6 +58,7 @@
     <p>
       The uploaded files will not be sent to a server; All process is done client-wise!<br>
       The first working version of this was done in a day. .osu files are not the most complex ones.<br>
+      osuTAGger 1.0.1 by Naruyoko<br>
       <br>
       Acknowledgements:<br>
       Awesome game by Dean "peppy" Herbert<br>

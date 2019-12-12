@@ -22,9 +22,11 @@ onloadFuncs.push(function(){
     dg("CSl").textContent=dg("CS").value;
   };
   dg("OD").oninput=function (){
+    if (components.AR===undefined) dg("ARl").textContent=dg("AR").value=dg("OD").value;
     dg("ODl").textContent=dg("OD").value;
   };
   dg("AR").oninput=function (){
+    if (components.AR===undefined) dg("AR").value=dg("OD").value;
     dg("ARl").textContent=dg("AR").value;
   };
 });

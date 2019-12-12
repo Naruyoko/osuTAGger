@@ -200,16 +200,20 @@ function readComponents(){
 function displayComponents(){
   var f=importedFileContent;
   var s=f.split(components.lineBreak);
-  dg("title").textContent=s[components.title].substring(6);
-  dg("titleUnicode").textContent=s[components.titleUnicode].substring(13);
-  dg("artist").textContent=s[components.artist].substring(7);
-  dg("artistUnicode").textContent=s[components.artistUnicode].substring(14);
+  dg("title").textContent=s[components.title].substring(6)+(components.titleUnicode===undefined?"":" ("+s[components.titleUnicode].substring(13)+")");
+  dg("artist").textContent=s[components.artist].substring(7)+(components.artistUnicode===undefined?"":" ("+s[components.artistUnicode].substring(14)+")");
   dg("creator").textContent=s[components.creator].substring(8);
   dg("version").textContent=s[components.version].substring(8);
   dg("HP").value=dg("HPl").textContent=dg("HPd").textContent=s[components.HP].substring(12);
   dg("CS").value=dg("CSl").textContent=dg("CSd").textContent=s[components.CS].substring(11);
   dg("OD").value=dg("ODl").textContent=dg("ODd").textContent=s[components.OD].substring(18);
-  dg("AR").value=dg("ARl").textContent=dg("ARd").textContent=s[components.AR].substring(13);
+  if (components.AR===undefined){
+    dg("AR").value=dg("ARl").textContent=dg("ARd").textContent=s[components.OD].substring(18);
+    dg("ARdisabled").style.display="";
+  }else{
+    dg("AR").value=dg("ARl").textContent=dg("ARd").textContent=s[components.AR].substring(13);
+    dg("ARdisabled").style.display="none";
+  }
   dg("difname").value=s[components.version].substring(8)+" Player [#]";
 }
 
@@ -223,8 +227,10 @@ onloadFuncs.push(function (){
       dg("s3").style.display="none";
       throw e;
     }finally{
-      dg("generating").style.display="none";
-      dg("s3").style.display="";
+      if (dg("downloadtype").value!="zip"){
+        dg("generating").style.display="none";
+        dg("s3").style.display="";
+      }
     }
   };
 });
@@ -244,15 +250,21 @@ function generateFile(){
   var p=dg("s3");
   while (p.firstChild) p.removeChild(p.firstChild);
   if (dg("downloadtype").value=="Separate files"){
+    var z=0;
     for (var i=0;i<m;i++){
       var e=document.createElement("A");
       var name=difname.replace(new RegExp("\\[#\\]","g"),i+1);
-      e.textContent=name;
-      e.href=URL.createObjectURL(textToFile(f[i]));
+      var g=textToFile(f[i]);
+      e.textContent=name+" ("+g.size+")";
+      z+=g.size;
+      e.href=URL.createObjectURL(textToFile(g));
       e.download=components.fileName.substring(0,components.fileName.lastIndexOf("["+s[components.version].substring(8)+"]"))+"["+name+"].osu";
       p.appendChild(e);
       p.appendChild(document.createElement("BR"));
     }
+    e=document.createElement("DIV");
+    e.textContent="Total: "+z;
+    p.prepend(e);
   }else if (dg("downloadtype").value=="zip"){
     var z=new JSZip();
     for (var i=0;i<m;i++){
@@ -261,10 +273,12 @@ function generateFile(){
     }
     z.generateAsync({type:"blob"}).then(function (content){
       var e=document.createElement("A");
-      e.textContent=components.fileName.substring(0,components.fileName.lastIndexOf(".osu"))+".zip";
+      e.textContent=components.fileName.substring(0,components.fileName.lastIndexOf(".osu"))+".zip ("+content.size+")";
       e.href=URL.createObjectURL(content);
       e.download=components.fileName.substring(0,components.fileName.lastIndexOf(".osu"))+".zip";
       p.appendChild(e);
+      dg("generating").style.display="none";
+      dg("s3").style.display="";
     });
   }
 }
@@ -287,7 +301,7 @@ function splitFile(){
     b[components.HP]="HPDrainRate:"+dg("HP").value;
     b[components.CS]="CircleSize:"+dg("CS").value;
     b[components.OD]="OverallDifficulty:"+dg("OD").value;
-    b[components.AR]="ApproachRate:"+dg("AR").value;
+    if (components.AR!==undefined) b[components.AR]="ApproachRate:"+dg("AR").value;
     a.push(b);
   }
   if (components.colours&&dg("color").value=="Rainbow"){
@@ -322,6 +336,7 @@ function splitFile(){
           p=(p+(t>>4&7)+1)%m;
         }
       }
+      if (p==-1) p=0;
       if (dg("spinners").checked&&t&8){
         for (j=0;j<m;j++){
           var w=l.split(",");
